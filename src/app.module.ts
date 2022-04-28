@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConnectionService } from './connection/connection.service';
 import { WinstonTransports } from './utils/Logger';
 
 @Module({
@@ -20,6 +21,9 @@ import { WinstonTransports } from './utils/Logger';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ConnectionService
+  ],
 })
 export class AppModule {}
