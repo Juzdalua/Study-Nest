@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConnectionService } from './connection/connection.service';
 import { WinstonTransports } from './utils/Logger';
+import { DiscoverModule } from './discover/discover.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WinstonTransports } from './utils/Logger';
         WinstonTransports(),
       ],
     }),
+    DiscoverModule,
   ],
   controllers: [AppController],
   providers: [
