@@ -1,102 +1,92 @@
 import { Type } from "class-transformer";
-import { IsDate, IsInt, IsOptional, IsString } from "class-validator";
+import { IsDate, IsInt, IsJSON, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsAddress } from "src/decorators/is-address.decorator";
 
 export class CreateUpcomingDTO{
     @IsString()
-    readonly COLLECTION_NAME: string;
+    readonly collectionName: string;
+
+    @IsOptional()
+    @IsAddress()
+    readonly contractAddress: string;
 
     @IsOptional()
     @IsString()
-    readonly CONTRACT_ADDRESS: string;
+    readonly category: string;
 
     @IsOptional()
     @IsString()
-    readonly CATEGORY: string;
+    readonly description: string;
 
     @IsOptional()
     @IsString()
-    readonly DESCRIPTION_SHORT: string;
-
-    @IsOptional()
-    @IsString()
-    readonly DESCRIPTION_LONG: string;
-
-    @IsOptional()
-    @IsString()
-    readonly EMAIL: string = null;
+    readonly roadmapDescription: string;
 
     @IsOptional()
     @IsDate()
     @Type(()=>Date)
-    readonly DUE_DATE: Date = null;
+    readonly dueDate: Date = null;
 
     @IsOptional()
     @IsString()
-    readonly WEBSITE_URL: string;
+    readonly email: string = null;
 
     @IsOptional()
-    @IsString()
-    readonly BIO_URL: string;
+    @IsUrl()
+    readonly imageUrl: string;
 
     @IsOptional()
-    @IsString()
-    readonly DISCORD_URL: string;
+    @IsUrl()
+    readonly websiteUrl: string;
 
     @IsOptional()
-    @IsString()
-    readonly TWITTER_URL: string;
+    @IsUrl()
+    readonly bioUrl: string;
 
     @IsOptional()
-    @IsString()
-    readonly IMAGE_URL: string;
+    @IsUrl()
+    readonly discordUrl: string;
 
     @IsOptional()
-    readonly IMAGE: Express.Multer.File;
+    @IsUrl()
+    readonly twitterUrl: string;
 
     @IsOptional()
-    @IsString()
-    readonly MARKET_URL: string;
+    @IsUrl()
+    readonly marketUrl: string;
 
     @IsOptional()
     @IsInt()
-    readonly MAX_SUPPLY: string;
+    readonly maxSupply: string;
 
     @IsOptional()
     @IsString()
-    readonly MINT_PRICE: string = null;
+    readonly mintPrice: string = null;
 
     @IsOptional()
     @IsString()
-    readonly MINT_TYPE: string;
+    readonly mintType: string;
 
     @IsInt()
-    readonly DECIMALS: number = 18;
+    readonly decimals: number = 18;
 
     @IsOptional()
     @IsString()
-    readonly NETWORK: string = "ETH";
-
-    @IsOptional()
-    @IsInt()
-    readonly DISCORD_BOT: number;
-
-    @IsOptional()
-    @IsString()
-    readonly ROADMAP_DESCRIPTION: string;
-
-    @IsOptional()
-    @IsString()
-    readonly PAYMENT_TOKEN: string;
-
-    @IsOptional()
-    @IsString()
-    readonly TOKEN_STANDARD: string;
-
-    @IsOptional()
-    @IsString()
-    readonly MARKETING_EVENT: string;
+    readonly network: string = "ETH";
 
     @IsOptional()
     @IsInt()
-    readonly PRIORITY: number;
+    readonly discordBot: number;
+
+    @IsOptional()
+    @IsString()
+    readonly marketingEvent: string;
+
+    @IsOptional()
+    @IsJSON()
+    readonly marketImage: JSON;
+
+    @IsOptional()
+    @IsInt()
+    readonly priority: number;
 }

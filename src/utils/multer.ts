@@ -1,8 +1,10 @@
 import { BadRequestException } from "@nestjs/common";
 import AWS from "aws-sdk";
 import multerS3 from "multer-s3";
-import { extname } from "path";
+import { extname, join } from "path";
 import "dotenv/config"
+import { diskStorage } from "multer";
+import { existsSync, mkdirSync } from "fs";
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -16,6 +18,35 @@ const fileFilter = (req: Express.Request, file:Express.Multer.File, cb:Function)
         cb(new BadRequestException(400, 'Invalid Image type.'), false);
     else
         cb(null, true);
+};
+
+export const multerOptionsLocal = {
+    fileFilter,
+
+    storage:
+    diskStorage({
+        destination: (req: Express.Request, file:Express.Multer.File, cb:Function) => {
+            //make a folder
+            if(!existsSync(join(__dirname, '../../public')))
+                mkdirSync(join(__dirname, '../../public'));
+            if(!existsSync(join(__dirname, '../../public/upload')))
+                mkdirSync(join(__dirname, '../../public/upload'));
+            if(!existsSync(join(__dirname, '../../public/upload/img')))
+                mkdirSync(join(__dirname, '../../public/upload/img'));
+
+            cb(null, process.env.MULTER_DEST);
+        },
+
+        filename: (req: Express.Request, file:Express.Multer.File, cb:Function) => {
+            cb(null, `${Date.now()}${extname(file.originalname)}`);
+        },
+    }),
+
+    limits: {
+        fieldNameSize: 200,
+        fileSize: 1048576, // byte => 1MB,
+        files: 10,
+    },
 };
 
 export const multerOptionsUserAvatar = {
@@ -54,6 +85,6 @@ export const multerOptionsDiscoverUpcoming = {
     limits: {
         fieldNameSize: 200,
         fileSize: 5242880, // byte => 5MB,
-        files: 1,
+        files: 6,
     },
 };

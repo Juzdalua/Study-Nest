@@ -29,7 +29,7 @@ export class ConnectionService implements OnModuleInit {
     }
 
     async onModuleInit() {
-
+        console.log(`✅ START CONNECTION 🚀 `)
     };
 
     async query(rawQuery: string, params: any[]): Promise<RowDataPacket[][] | RowDataPacket[] | OkPacket | OkPacket[] | ResultSetHeader> {
