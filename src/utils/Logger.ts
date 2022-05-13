@@ -1,4 +1,4 @@
-import { WinstonModule } from "nest-winston";
+import { utilities, WinstonModule } from "nest-winston";
 import Winston from "winston";
 import WinstonDaily from "winston-daily-rotate-file";
 
@@ -48,3 +48,7 @@ export const WinstonTransports = () => {
         )
     })
 };
+
+// Winston.stream = {
+//     write:
+// }

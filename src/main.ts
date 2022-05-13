@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+import express from "express";
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import TerminalExceptionFilter from './exception/terminal.exception.filter';
 import { WinstonCreate } from './utils/Logger';
 import TerminalValidationPipe from './validation-pipe/terminal-validation-pipe';
-import express from "express";
-import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
