@@ -37,6 +37,7 @@
     "multer-s3": "^2.10.0",
     "mysql2": "^2.3.3",
     "nest-morgan": "^2.0.0",
+    "nestjs-real-ip": "^2.1.0",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
