@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import express from "express";
+import session from 'express-session';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { join } from 'path';
 import { AppModule } from './app.module';
@@ -21,6 +22,14 @@ async function bootstrap() {
     origin: process.env.CORS_SITES?.split(","),
     optionsSuccessStatus: 200
   });
+
+  //use session
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      // resave: false,
+      // saveUninitialized: false,
+  }));
 
   //use static folder
   app.use('/public', express.static(join(__dirname, '../public')));
