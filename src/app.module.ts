@@ -11,6 +11,7 @@ import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { MorganInterceptor, MorganModule } from 'nest-morgan';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DiscordModule } from './discord/discord.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     UploadModule,
     AccountModule,
     AuthModule,
+    DiscordModule,
   ],
   controllers: [AppController],
   providers: [
