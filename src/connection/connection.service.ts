@@ -9,6 +9,10 @@ export class ConnectionService implements OnModuleInit {
     public CP;
 
     constructor(){
+
+    }
+
+    async onModuleInit() {
         this.POOL = connectionPool.createPool({
             host: process.env.MYSQL_HOST as string,
             user: process.env.MYSQL_USER as string,
@@ -26,9 +30,7 @@ export class ConnectionService implements OnModuleInit {
             database: process.env.MYSQL_DATABASE as string,
             connectionLimit: parseInt(process.env.MYSQL_CONNECTION_LIMIT as string) ?? 50
         })
-    }
 
-    async onModuleInit() {
         console.log(`✅ START CONNECTION 🚀 `)
     };
 
