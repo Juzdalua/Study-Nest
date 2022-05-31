@@ -1,43 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { ConnectionService } from './connection/connection.service';
 import SQL from 'sql-template-strings';
-import egg from 'src/mockup/egg.json';
+import { ConnectionService } from './connection/connection.service';
+import params from "./mockup/egg.json";
+import salesData from "./mockup/fry.json";
+import Bignumber from 'bignumber.js';
+import {toCamelCase} from "./utils/model"
+import { RowDataPacket } from 'mysql2';
 
 @Injectable()
 export class AppService {
   constructor(private connectionService: ConnectionService) {}
   async getHello() {
-    const data = egg;
-    let filter = {
-      erc721: [],
-      erc1155: [],
-      contractsInfo: [],
-    };
+    const user = await this.connectionService.SQL(SQL`
+    SELECT * FROM USERS WHERE id1 = 9999`);
 
+    console.log(Object.keys(user)[0])
 
-
-    const newMap = data.contractsInfo.map(e => {
-      const salesList = [];
-      const yami = data[e.schema.toLowerCase()].forEach((ele:any) => {
-        if(ele.address.toLowerCase() === e.address.toLowerCase()){
-          salesList.push(ele);
-        }
-      })
-      console.log(salesList)
-
-      return {
-        ...e,
-        salesList
-      }
-    });
-
-    newMap.forEach(e => {
-      e.salesList.forEach(ele => {
-        console.log(`🚀 Event:Mint => ${e.name} #${ele.tokenId} / Price: ${data.price}, Gas: ${data.gas} / ${e.address}`);
-      })
-    })
-    return newMap
-
+    return (user as RowDataPacket).length > 0 ? toCamelCase(user[0]) : {};
 
   }
 }
