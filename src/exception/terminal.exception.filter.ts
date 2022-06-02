@@ -14,11 +14,11 @@ export class TerminalExceptionFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
 
         if (exception instanceof TerminalException) {
-            console.log(`message: ${exception.getErrorResult().errorMsg}, code: ${exception.getErrorResult().errorCode}`)
-            console.log(request.get('user-agent'))
-            console.log(request.ip)
-            console.log(request.params)
-            console.log(request.body)
+            // console.log(`message: ${exception.getErrorResult().errorMsg}, code: ${exception.getErrorResult().errorCode}`)
+            // console.log(request.get('user-agent'))
+            // console.log(request.ip)
+            // console.log(request.params)
+            // console.log(request.body)
 
 
             response.status(exception.getStatus()).json({
@@ -37,12 +37,12 @@ export class TerminalExceptionFilter implements ExceptionFilter {
                     errorMsg = exception.response.message.join(", ");
                 }
             }
-            console.log(`message: ${errorMsg}, code: ${status}`)
-            console.log(request.get('user-agent'))
-            console.log(request.ip)
-            console.log(request.params)
-            console.log(request.body)
-            this.CP.SQL(SQL`INSERT INTO ERROR_LOG (CODE, MSG) VALUES (${status}, ${errorMsg})`)
+            // console.log(`message: ${errorMsg}, code: ${status}`)
+            // console.log(request.get('user-agent'))
+            // console.log(request.ip)
+            // console.log(request.params)
+            // console.log(request.body)
+            // this.CP.SQL(SQL`INSERT INTO ERROR_LOG (CODE, MSG) VALUES (${status}, ${errorMsg})`)
 
             response
                 .status(status)
