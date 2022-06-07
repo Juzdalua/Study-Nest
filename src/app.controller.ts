@@ -1,4 +1,4 @@
-import { Body, ConsoleLogger, Controller, ExecutionContext, Get, Headers, Ip, Post, Req, Res, Session } from '@nestjs/common';
+import { Body, ConsoleLogger, Controller, ExecutionContext, Get, Headers, Ip, Param, Post, Req, Res, Session } from '@nestjs/common';
 import { AppService } from './app.service';
 import {RealIp} from "nestjs-real-ip";
 import { Request, Response } from 'express';
@@ -32,9 +32,21 @@ export class AppController {
     return await this.appService.getHello();
   }
 
-  @Get("a")
-  async a(@Req() req:Request){
-    return req.session;
+  @Get(":add([0-9a-fA-F]{3})")
+  async a(@Req() req:Request, @Param() add:any){
+    return add;
+  }
+  @Get(":add1([0-9a-fA-F]{2})")
+  async ab(@Req() req:Request, @Param() add1:any){
+    return add1;
+  }
+  @Get(":add2")
+  async ac(@Req() req:Request, @Param() add2:any){
+    return add2;
+  }
+  @Get(":add3")
+  async ad(@Req() req:Request, @Param() param:any){
+    return param;
   }
 
 }
