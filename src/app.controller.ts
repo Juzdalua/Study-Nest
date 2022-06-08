@@ -14,6 +14,12 @@ export class AppController {
   async getHello(@Req() req: Request, @Ip() ip:Express.Request, @Headers() headers:Request, @Session() session:any) {
     const a = ["a","b","b"];
     const b = [];
+    const c = [
+      {id: 1,
+      name: 'jun'},
+      {id: 2,
+      name: 'kim'}
+    ]
 
 
     return {
@@ -27,7 +33,10 @@ export class AppController {
       h: b.includes("ab"),
       i: new BigNumber(0),
       j: new Array(Math.ceil(86400 / 86400)).fill(1),
-      k: Math.min(...[1,2,3])
+      k: Math.min(...[1,2,3]),
+      l: a.find(e => e="a"),
+      m: c.find( e=> e.id = 2),
+      n: b.find(e=> e=1)
     }
     return await this.appService.getHello();
   }
@@ -40,11 +49,11 @@ export class AppController {
   async ab(@Req() req:Request, @Param() add1:any){
     return add1;
   }
-  @Get(":add2")
+  @Get(":add2([0-9])")
   async ac(@Req() req:Request, @Param() add2:any){
     return add2;
   }
-  @Get(":add3")
+  @Get(":add3([0-9]{5,10}){1}")
   async ad(@Req() req:Request, @Param() param:any){
     return param;
   }
