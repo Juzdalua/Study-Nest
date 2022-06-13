@@ -37,8 +37,8 @@ async function bootstrap() {
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
-      // resave: false,
-      // saveUninitialized: false,
+      resave: false,
+      saveUninitialized: false,
   }));
 
   //use static folder
