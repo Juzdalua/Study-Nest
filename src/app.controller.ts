@@ -1,61 +1,112 @@
-import { Body, ConsoleLogger, Controller, ExecutionContext, Get, Headers, Ip, Param, Post, Req, Res, Session } from '@nestjs/common';
+import { Controller, Get, Post, Query, Redirect, Session, UseGuards } from '@nestjs/common';
+import BigNumber from "bignumber.js";
+import Twit from 'twit';
+import twitterSignIn from "twittersignin";
+import Web3 from 'web3';
 import { AppService } from './app.service';
-import {RealIp} from "nestjs-real-ip";
-import { Request, Response } from 'express';
-import bs58 from "bs58";
-import { toCamelCase } from './utils/model';
-import BigNumber from 'bignumber.js';
+import { RecaptchaGuard } from './auth/recaptcha.guard';
+
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
 
-  @Get()
-  async getHello(@Req() req: Request, @Ip() ip:Express.Request, @Headers() headers:Request, @Session() session:any) {
-    const a = ["a","b","b"];
-    const b = [];
-    const c = [
-      {id: 1,
-      name: 'jun'},
-      {id: 2,
-      name: 'kim'}
-    ]
+    ) {
+  }
 
+  public Twitter = twitterSignIn({
+    consumerKey: process.env.TWITTER_API_KEY,
+    consumerSecret: process.env.TWITTER_API_SECRET_KEY,
+    accessToken: process.env.TWITTER_ACCESS_TOKEN,
+    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  });
+
+  @Get("/")
+  async home(){
+    const arr = [1,2];
+    const a = new Date('2022-06-15T00:00:00.000Z');
+    const b = 1.81073e-7;
+    console.log(a.toISOString(), a.toString())
+    console.log(new BigNumber(b).multipliedBy(Math.pow(10,18)).toString(10))
+
+
+    return ;
+  }
+
+  @Get("/test")
+  async test(){
 
     return {
-      a: a.toString(),
-      b: new Array(a.length).fill("?").join(","),
-      c: `'${a.toString().replace(/,/g, "','")}'`,
-      d: [].map((e:any) => {return toCamelCase(e)}),
-      e: b[0],
-      f: Object.keys(b).length,
-      g: a.includes("a"),
-      h: b.includes("ab"),
-      i: new BigNumber(0),
-      j: new Array(Math.ceil(86400 / 86400)).fill(1),
-      k: Math.min(...[1,2,3]),
-      l: a.find(e => e="a"),
-      m: c.find( e=> e.id = 2),
-      n: b.find(e=> e=1)
+
     }
+  }
+
+  @Get("/eth")
+  @Redirect()
+  async getHello(@Query() query: any, @Session() session: Record<string, any>) {
+
+    // get ETH
+    const web3 = new Web3(process.env.WEB3_PROVIDER_INFURA);
+    const address = '0x3923272F19060F511629e46Fc18a0a24D279c9e6';
+
+    const eth = await web3.eth.getBalance(address);
+    const result = new BigNumber(eth).dividedBy(Math.pow(10, 18)).toString(10)+" ETH";
+
+    // get twitter API
+    // const oauthApi = `https://api.twitter.com/oauth/request_token?oauth_callback=${process.env.TWITTER_REDIRECT_URL}`;
+    // const response = await axios.post(oauthApi, {
+    //   headers: {
+    //     "Authorization": `Bearer ${process.env.TWITTER_BEARER_TOKEN}`
+    //   }
+    // });
+    // console.log(response.data)
+
+    // https://github.com/shalvah/twittersignin
+
+
+    const response = await this.Twitter.getRequestToken({
+      oauth_callback: process.env.TWITTER_REDIRECT_URL,
+      x_auth_access_type: "read",
+    });
+    session.requestTokenSecret = response.oauth_token_secret;
+
+    return {
+      url: `https://api.twitter.com/oauth/authorize?oauth_token=${response.oauth_token}`
+    }
+
+
+
+    return {result};
     return await this.appService.getHello();
   }
 
-  @Get(":add([0-9a-fA-F]{3})")
-  async a(@Req() req:Request, @Param() add:any){
-    return add;
-  }
-  @Get(":add1([0-9a-fA-F]{2})")
-  async ab(@Req() req:Request, @Param() add1:any){
-    return add1;
-  }
-  @Get(":add2([0-9])")
-  async ac(@Req() req:Request, @Param() add2:any){
-    return add2;
-  }
-  @Get(":add3([0-9]{5,10}){1}")
-  async ad(@Req() req:Request, @Param() param:any){
-    return param;
-  }
+  @Get("/twitter/oauth/token")
+  async getRequestToken(@Query() query:any, @Session() session: Record<string, any>){
+    const {oauth_token, oauth_verifier} = query;
 
+    const response = await this.Twitter.getAccessToken(oauth_token, session.requestTokenSecret, oauth_verifier);
+    session.accessToken = response.oauth_token;
+    session.accessTokenSecret = response.oauth_token_secret;
+    session.userId = response.user_id;
+    session.userName = response.screen_name;
+
+    // const user = this.Twitter.getUser(response.oauth_token,response.oauth_token_secret)
+
+    const twit = new Twit({
+      consumer_key: process.env.TWITTER_API_KEY,
+      consumer_secret: process.env.TWITTER_API_SECRET_KEY,
+      access_token: process.env.TWITTER_ACCESS_TOKEN,
+      access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+    });
+
+    const result = await twit.get('friendships/show', {source_id: '1509795480015802373', target_screen_name: 'OG_XYZ'});
+    return result.data;
+  };
+
+  @UseGuards(RecaptchaGuard)
+  @Post("1")
+  async recaptchaTest(){
+    return ;
+  }
 }
