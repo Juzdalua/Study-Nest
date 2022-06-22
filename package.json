@@ -32,6 +32,7 @@
     "aws-sdk": "^2.1125.0",
     "axios": "^0.27.2",
     "axios-oauth-1.0a": "^0.3.5",
+    "bcrypt": "^5.0.1",
     "bignumber.js": "^9.0.2",
     "bs58": "^5.0.0",
     "class-transformer": "^0.5.1",
