@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Query, Redirect, Session, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, Next, Post, Query, Redirect, Session, UseGuards } from '@nestjs/common';
 import BigNumber from "bignumber.js";
+import { NextFunction } from 'express';
 import Twit from 'twit';
 import twitterSignIn from "twittersignin";
 import Web3 from 'web3';
@@ -24,12 +25,7 @@ export class AppController {
 
   @Get("/")
   async home(){
-    const arr = [1,2];
-    const a = new Date('2022-06-15T00:00:00.000Z');
-    const b = 1.81073e-7;
-    console.log(a.toISOString(), a.toString())
-    console.log(new BigNumber(b).multipliedBy(Math.pow(10,18)).toString(10))
-
+    const arr = [ 96, 97];
 
     return ;
   }
@@ -40,6 +36,13 @@ export class AppController {
     return {
 
     }
+  }
+
+  @Get("/favicon.ico")
+  @HttpCode(204)
+  ignoreFavicon(@Next() next:NextFunction){
+    console.log("^.^")
+    next();
   }
 
   @Get("/eth")
