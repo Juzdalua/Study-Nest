@@ -25,7 +25,19 @@ export class AppController {
 
   @Get("/")
   async home(){
-    const arr = [ 96, 97];
+    const arr = [ 1,2,3,4,5,9,10,80,96, 97];
+
+    arr.forEach((e:number) => {
+      if(e === 2)
+        return false;
+      console.log(e)
+    });
+
+    arr.every((e:number) => {
+      if(e === 2)
+        return false;
+      console.log(e)
+    });
 
     return ;
   }
