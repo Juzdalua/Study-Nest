@@ -14,6 +14,7 @@ export class TerminalExceptionFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
 
         if (exception instanceof TerminalException) {
+          console.log(exception)
             // console.log(`message: ${exception.getErrorResult().errorMsg}, code: ${exception.getErrorResult().errorCode}`)
             // console.log(request.get('user-agent'))
             // console.log(request.ip)
@@ -26,6 +27,7 @@ export class TerminalExceptionFilter implements ExceptionFilter {
                 result: exception.getErrorResult()
             })
         } else {
+          console.log(exception)
             let status =  400;
             if(typeof exception.getStatus === 'function') {
                 status = exception.getStatus()
